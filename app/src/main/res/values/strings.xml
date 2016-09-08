@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Language Translator</string>
+    <string name="translation_key">trnsl.1.1.20160908T092615Z.9b7e4d8b17216cd8.66d062c870f3df71f02829f87d48b1c5281c12ef</string>
+    <string name="translating">Translating...</string>
+    <string name="enter_text">Enter text</string>
+    <string name="translate">Translate</string>
+    <string name="powered_by_yandex">Powered by Yandex</string>
+    <string name="to">To</string>
+    <string name="from">From</string>
+
+    <string-array name="testValues">
+        <item>en</item>
+        <item>fr</item>
+    </string-array>
 </resources>
