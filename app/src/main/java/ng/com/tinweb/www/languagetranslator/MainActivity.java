@@ -73,13 +73,15 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     @Override
     public void onClick(View view) {
         if (view == activityBinding.translateButton) {
+            // TODO get translation to be handled by presenter
+
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setMessage(getString(R.string.translating));
             progressDialog.setIndeterminate(true);
             progressDialog.show();
+
             String input = activityBinding.fromInputEditText.getText().toString();
-            // TODO initialise translation from here
             String lang = fromSelector + "-" + toSelector;
             TranslatorAPI.translate(input, lang, new TranslatorAPI.TranslateCallback() {
                 @Override
