@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.testValues, android.R.layout.simple_spinner_item);
 
+        // TODO use a custom adapter here to make spinner selection in plain English
+
         activityBinding.fromSelectorSpinner.setAdapter(spinnerAdapter);
         activityBinding.toSelectorSpinner.setAdapter(spinnerAdapter);
 
