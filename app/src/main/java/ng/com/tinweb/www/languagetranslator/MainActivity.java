@@ -51,9 +51,7 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 fromSelector = (String) adapterView.getItemAtPosition(i);
-                Log.i("Selector", "from changed to " + fromSelector);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 toSelector = (String) adapterView.getItemAtPosition(i);
-                Log.i("Selector", "to changed to " + toSelector);
             }
 
             @Override
@@ -76,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     @Override
     public void onClick(View view) {
         if (view == activityBinding.translateButton) {
-
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setMessage(getString(R.string.translating));

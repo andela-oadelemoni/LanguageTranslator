@@ -11,5 +11,9 @@
     <string-array name="testValues">
         <item>en</item>
         <item>fr</item>
+        <item>es</item>
+        <item>de</item>
+        <item>zh</item>
+        <item>ja</item>
     </string-array>
 </resources>
