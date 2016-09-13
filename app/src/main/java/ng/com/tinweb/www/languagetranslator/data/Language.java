@@ -35,4 +35,8 @@ public class Language {
     public HashMap<String, String> getLanguages() {
         return dataStore.getAllLanguages();
     }
+
+    public void removeAll() {
+        dataStore.deleteLanguages();
+    }
 }

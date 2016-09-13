@@ -1,34 +1,32 @@
-package ng.com.tinweb.www.languagetranslator;
+package ng.com.tinweb.www.languagetranslator.launcher;
 
-import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
+
 import ng.com.tinweb.www.languagetranslator.data.Language;
 import ng.com.tinweb.www.languagetranslator.data.LanguageDataStore;
-import ng.com.tinweb.www.languagetranslator.data.LanguageDbHelper;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 
-public class FullscreenActivity extends AppCompatActivity {
+/**
+ * Created by kamiye on 14/09/2016.
+ */
+public class LauncherPresenter implements ILauncherPresenter {
 
+    private WeakReference<ILauncherView> launcherView;
+    private Language languageModel;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_fullscreen);
+    public LauncherPresenter(ILauncherView launcherView) {
+        this.launcherView = new WeakReference<>(launcherView);
+        this.languageModel = new Language();
         getLanguages();
-
-        //deleteLanguages();
     }
 
-    private void deleteLanguages() {
-        LanguageDbHelper dbHelper = new LanguageDbHelper(getApplicationContext());
-        dbHelper.deleteLanguages();
+    @Override
+    public void removeAllLanguages() {
+        languageModel.removeAll();
     }
 
     private void getLanguages() {
@@ -44,14 +42,19 @@ public class FullscreenActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onError() {
+                public void onError(String message) {
                     Log.i("STATUS", "error getting languages");
+                    if (launcherView.get() != null) {
+                        launcherView.get().onLanguageLoadingError(message);
+                    }
                 }
             });
         }
         else {
             Log.i("STATUS", "language already is set");
-            launchMainActivity();
+            if (launcherView.get() != null) {
+                launcherView.get().onLanguageLoaded();
+            }
         }
     }
 
@@ -59,14 +62,11 @@ public class FullscreenActivity extends AppCompatActivity {
         languageModel.setLanguages(languages, new LanguageDataStore.DbActionCallback() {
             @Override
             public void onFinish() {
-                launchMainActivity();
+                if (launcherView.get() != null) {
+                    launcherView.get().onLanguageLoaded();
+                }
             }
         });
-    }
-
-    private void launchMainActivity() {
-        Intent intent = new Intent(FullscreenActivity.this, MainActivity.class);
-        startActivity(intent);
     }
 
 }

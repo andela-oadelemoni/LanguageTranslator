@@ -3,7 +3,6 @@ package ng.com.tinweb.www.languagetranslator.data;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -83,6 +82,7 @@ public class TranslatorAPI {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("STATUS", "error from api call");
+                callback.onError(error.getMessage());
             }
         });
         volleyRequestQueue.add(jsonRequest);
@@ -102,7 +102,7 @@ public class TranslatorAPI {
 
     public interface GetLanguageCallback {
         void onSuccess(JSONObject languages);
-        void onError();
+        void onError(String message);
     }
 
 }
