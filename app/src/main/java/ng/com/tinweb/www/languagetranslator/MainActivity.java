@@ -31,7 +31,6 @@ import ng.com.tinweb.www.languagetranslator.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity implements TranslatorView,
         View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private static Language languageModel;
     private ActivityMainBinding activityBinding;
     private ITranslatorPresenter translatorPresenter;
     private String fromSelector;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     }
 
     private void initialiseLanguageModel() {
-        languageModel = new Language();
+        Language languageModel = new Language();
         languages = languageModel.getLanguages();
     }
 
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
             String input = activityBinding.toOutputTextView.getText().toString();
             activityBinding.fromInputEditText.setText(input);
             activityBinding.toOutputTextView.setText("");
-
         }
     }
 
@@ -155,5 +153,16 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
 
             }
         });
+    }
+
+    private void resetTranslation() {
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
+        activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(
+                getString(R.string.defaultInputText)));
+        activityBinding.toSelectorSpinner.setSelection(adapter.getPosition(
+                getString(R.string.defaultOutputText)));
+
+        activityBinding.fromInputEditText.setText("");
+        activityBinding.toOutputTextView.setText("");
     }
 }
