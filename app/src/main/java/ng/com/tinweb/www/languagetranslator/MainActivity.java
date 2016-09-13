@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     private static Language languageModel;
     private ActivityMainBinding activityBinding;
     private ITranslatorPresenter translatorPresenter;
-    private String fromSelector = "en";
-    private String toSelector = "en";
+    private String fromSelector;
+    private String toSelector;
     private HashMap<String, String> languages;
 
     @Override
@@ -60,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         activityBinding.fromSelectorSpinner.setAdapter(spinnerAdapter);
         activityBinding.toSelectorSpinner.setAdapter(spinnerAdapter);
 
+        activityBinding.fromSelectorSpinner.setSelection(spinnerAdapter.getPosition(
+                getString(R.string.defaultInputText)));
+        activityBinding.toSelectorSpinner.setSelection(spinnerAdapter.getPosition(
+                getString(R.string.defaultOutputText)));
+
         activityBinding.fromSelectorSpinner.setOnItemSelectedListener(this);
         activityBinding.toSelectorSpinner.setOnItemSelectedListener(this);
     }
@@ -80,54 +87,73 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
 
     private void setUpTranslateAction() {
         activityBinding.translateButton.setOnClickListener(this);
+        activityBinding.switchTranslationImageView.setOnClickListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String value = (String) adapterView.getItemAtPosition(i);
-        if (adapterView.getId() == activityBinding.fromSelectorSpinner.getId()) {
+        if (adapterView == activityBinding.fromSelectorSpinner) {
             fromSelector = getLanguageCode(languages, value);
         }
-        if (adapterView.getId() == activityBinding.toSelectorSpinner.getId()) {
+        if (adapterView == activityBinding.toSelectorSpinner) {
             toSelector = getLanguageCode(languages, value);
         }
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+    public void onNothingSelected(AdapterView<?> adapterView) {}
 
     @Override
     public void onClick(View view) {
         if (view == activityBinding.translateButton) {
             // TODO get translation to be handled by presenter
-
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setMessage(getString(R.string.translating));
-            progressDialog.setIndeterminate(true);
-            progressDialog.show();
-
             String input = activityBinding.fromInputEditText.getText().toString();
-            String lang = fromSelector + "-" + toSelector;
-            TranslatorAPI.translate(input, lang, new TranslatorAPI.TranslateCallback() {
-                @Override
-                public void onSuccess(JSONObject response) {
-                    try {
-                        JSONArray array = response.getJSONArray("text");
-                        activityBinding.toOutputTextView.setText(array.getString(0));
-                        progressDialog.hide();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void onError() {
-
-                }
-            });
+            translateText(input);
         }
+        if (view == activityBinding.switchTranslationImageView) {
+            ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
+            String fromSelected = (String) activityBinding.fromSelectorSpinner.getSelectedItem();
+            String toSelected = (String) activityBinding.toSelectorSpinner.getSelectedItem();
+
+            activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(toSelected));
+            activityBinding.toSelectorSpinner.setSelection(adapter.getPosition(fromSelected));
+
+            Toast.makeText(this, "Languages switched...and translated", Toast.LENGTH_LONG).show();
+
+            String input = activityBinding.toOutputTextView.getText().toString();
+            activityBinding.fromInputEditText.setText(input);
+            activityBinding.toOutputTextView.setText("");
+
+        }
+    }
+
+    private void translateText(String input) {
+        String lang = fromSelector + "-" + toSelector;
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(getString(R.string.translating));
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+
+        TranslatorAPI.translate(input, lang, new TranslatorAPI.TranslateCallback() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    JSONArray array = response.getJSONArray("text");
+                    activityBinding.toOutputTextView.setText(array.getString(0));
+                    progressDialog.hide();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 }

@@ -8,6 +8,8 @@
     <string name="to">To</string>
     <string name="from">From</string>
     <string name="select_language">Select Language</string>
+    <string name="defaultInputText">English</string>
+    <string name="defaultOutputText">French</string>
 
     <string-array name="testValues">
         <item>en</item>
@@ -21,4 +23,5 @@
     <string name="proceed">Proceed</string>
     <string name="fetching_languages">Fetching Languages…</string>
     <string name="error_message">Error Loading Languages</string>
+    <string name="switch_translation">Switch Translation</string>
 </resources>

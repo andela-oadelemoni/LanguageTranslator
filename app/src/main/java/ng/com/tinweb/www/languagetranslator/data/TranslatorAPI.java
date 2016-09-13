@@ -40,7 +40,7 @@ public class TranslatorAPI {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", error.getMessage());
+                Log.e("ERROR", "An error occurred: " + error.getMessage());
             }
         });
         volleyRequestQueue.add(jsonRequest);
