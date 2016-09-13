@@ -31,6 +31,9 @@
                 <Spinner
                     android:id="@+id/fromSelectorSpinner"
                     android:layout_width="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:prompt="@string/select_language"
+                    android:entries="@array/testValues"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 

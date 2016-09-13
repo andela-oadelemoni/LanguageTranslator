@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import ng.com.tinweb.www.languagetranslator.LanguageTranslatorApplication;
@@ -21,6 +22,7 @@ import ng.com.tinweb.www.languagetranslator.R;
 public class TranslatorAPI {
 
     private static Context context = LanguageTranslatorApplication.getContext();
+    private static String apiKey = context.getResources().getString(R.string.translation_key);
 
     public static void translate(String input, String translationDirection, final TranslateCallback translateCallback) {
         RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
@@ -29,7 +31,6 @@ public class TranslatorAPI {
 
         String queryString = getUrl() + inputQuery + translationQuery;
 
-        Log.i("OUTPUT", queryString);
         JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonObjectRequest.Method.GET,
                 queryString, null, new Response.Listener<JSONObject>() {
             @Override
@@ -39,7 +40,32 @@ public class TranslatorAPI {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("OUTPUT", error.toString());
+                Log.e("ERROR", error.getMessage());
+            }
+        });
+        volleyRequestQueue.add(jsonRequest);
+    }
+
+    public static void getLanguages(final GetLanguageCallback callback) {
+        RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
+        String queryUrl = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?ui=en&key=" +
+                apiKey;
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonObjectRequest.Method.GET,
+                queryUrl, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // TODO handle response here
+                try {
+                    JSONObject languages = response.getJSONObject("langs");
+                    callback.onSuccess(languages);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO handle error here
             }
         });
         volleyRequestQueue.add(jsonRequest);
@@ -54,6 +80,11 @@ public class TranslatorAPI {
 
     public interface TranslateCallback {
         void onSuccess(JSONObject response);
+        void onError();
+    }
+
+    public interface GetLanguageCallback {
+        void onSuccess(JSONObject languages);
         void onError();
     }
 
