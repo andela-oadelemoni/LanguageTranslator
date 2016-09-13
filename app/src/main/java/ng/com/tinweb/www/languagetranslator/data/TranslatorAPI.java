@@ -47,6 +47,7 @@ public class TranslatorAPI {
     }
 
     public static void getLanguages(final GetLanguageCallback callback) {
+        Log.i("STATUS", "language call is made");
         RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
         String queryUrl = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?ui=en&key=" +
                 apiKey;
@@ -54,7 +55,7 @@ public class TranslatorAPI {
                 queryUrl, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                // TODO handle response here
+                Log.i("STATUS", "response gotten from api call");
                 try {
                     JSONObject languages = response.getJSONObject("langs");
                     callback.onSuccess(languages);
@@ -65,7 +66,7 @@ public class TranslatorAPI {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // TODO handle error here
+                Log.i("STATUS", "error from api call");
             }
         });
         volleyRequestQueue.add(jsonRequest);

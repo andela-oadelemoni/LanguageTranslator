@@ -22,38 +22,10 @@ public class LanguageTranslatorApplication extends Application {
         super.onCreate();
 
         context = this;
-        getLanguages();
     }
 
     public static Context getContext() {
         return context;
     }
 
-    private void getLanguages() {
-        final Language languageModel = new Language();
-        // check if languages have been set
-        if (!languageModel.isLanguagesSet()) {
-            // get the languages
-            TranslatorAPI.getLanguages(new TranslatorAPI.GetLanguageCallback() {
-                @Override
-                public void onSuccess(JSONObject languages) {
-                    setLanguages(languageModel, languages);
-                }
-
-                @Override
-                public void onError() {
-                    Log.i("ERROR", "");
-                }
-            });
-        }
-    }
-
-    private void setLanguages(Language languageModel, JSONObject languages) {
-        languageModel.setLanguages(languages, new LanguageDataStore.DbActionCallback() {
-            @Override
-            public void onFinish() {
-                // TODO proceed to the application
-            }
-        });
-    }
 }

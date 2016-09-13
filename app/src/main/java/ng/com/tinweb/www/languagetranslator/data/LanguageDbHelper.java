@@ -78,7 +78,7 @@ public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataSt
                 null,
                 null
         );
-        if (cursor.moveToFirst()) {
+        if (cursor.getCount() > 0) {
             cursor.close();
             return true;
         }
@@ -88,6 +88,6 @@ public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataSt
     @Override
     public void deleteLanguages() {
         SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("dele from " + DbContract.LanguagesSchema.TABLE_NAME);
+        database.execSQL("delete from " + DbContract.LanguagesSchema.TABLE_NAME);
     }
 }

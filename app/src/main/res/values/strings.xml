@@ -18,7 +18,7 @@
         <item>ja</item>
     </string-array>
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="proceed">Proceed</string>
+    <string name="fetching_languages">Fetching Languages…</string>
+    <string name="error_message">Error Loading Languages</string>
 </resources>
