@@ -20,13 +20,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ng.com.tinweb.www.languagetranslator.data.Language;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 import ng.com.tinweb.www.languagetranslator.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements TranslatorView,
-        View.OnClickListener{
+        View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static Language languageModel;
     private ActivityMainBinding activityBinding;
@@ -51,33 +52,16 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     }
 
     private void setUpSpinners() {
-        List<String> languages = new ArrayList<>(this.languages.values());
-        Collections.sort(languages);
+        List<String> spinnerLanguages = new ArrayList<>(this.languages.values());
+        Collections.sort(spinnerLanguages);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, languages);
-
-        // TODO use a custom adapter here to make spinner selection in plain English
+                android.R.layout.simple_spinner_dropdown_item, spinnerLanguages);
 
         activityBinding.fromSelectorSpinner.setAdapter(spinnerAdapter);
         activityBinding.toSelectorSpinner.setAdapter(spinnerAdapter);
 
-        activityBinding.fromSelectorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fromSelector = (String) adapterView.getItemAtPosition(i);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
-        activityBinding.toSelectorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                toSelector = (String) adapterView.getItemAtPosition(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
+        activityBinding.fromSelectorSpinner.setOnItemSelectedListener(this);
+        activityBinding.toSelectorSpinner.setOnItemSelectedListener(this);
     }
 
     private void initialiseLanguageModel() {
@@ -85,8 +69,33 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         languages = languageModel.getLanguages();
     }
 
+    private String getLanguageCode(HashMap<String, String> map, String value) {
+        for (String key : map.keySet()) {
+            if (map.get(key).equals(value)) {
+                return key;
+            }
+        }
+        return null;
+    }
+
     private void setUpTranslateAction() {
         activityBinding.translateButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String value = (String) adapterView.getItemAtPosition(i);
+        if (adapterView.getId() == activityBinding.fromSelectorSpinner.getId()) {
+            fromSelector = getLanguageCode(languages, value);
+        }
+        if (adapterView.getId() == activityBinding.toSelectorSpinner.getId()) {
+            toSelector = getLanguageCode(languages, value);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     @Override
