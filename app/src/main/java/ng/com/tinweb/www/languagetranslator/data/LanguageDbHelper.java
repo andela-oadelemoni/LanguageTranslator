@@ -9,10 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by kamiye on 13/09/2016.
@@ -20,21 +18,19 @@ import java.util.List;
 public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataStore {
 
     // Note: if you change the database schema, you must increment the database version
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Translator.db";
 
     public LanguageDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DbContract.DATABASE_NAME, null, DbContract.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DbContract.SQL_CREATE_ENTRIES);
+        sqLiteDatabase.execSQL(DbContract.SQL_CREATE_LANGUAGE_ENTRIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVerson, int newVersion) {
-        sqLiteDatabase.execSQL(DbContract.SQL_DELETE_ENTRIES);
+        sqLiteDatabase.execSQL(DbContract.SQL_DELETE_LANGUAGE_ENTRIES);
         onCreate(sqLiteDatabase);
     }
 

@@ -4,25 +4,15 @@ import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ng.com.tinweb.www.languagetranslator.data.Language;
 import ng.com.tinweb.www.languagetranslator.data.ShakeDetector;
@@ -37,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     private String fromSelector;
     private String toSelector;
     private HashMap<String, String> languages;
+    private ArrayAdapter<String> spinnerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +69,13 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
             translateText(input);
         }
         if (view == activityBinding.switchTranslationImageView) {
-            ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
             String fromSelected = (String) activityBinding.fromSelectorSpinner.getSelectedItem();
             String toSelected = (String) activityBinding.toSelectorSpinner.getSelectedItem();
 
-            activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(toSelected));
-            activityBinding.toSelectorSpinner.setSelection(adapter.getPosition(fromSelected));
+            activityBinding.fromSelectorSpinner.setSelection(spinnerAdapter.getPosition(toSelected));
+            activityBinding.toSelectorSpinner.setSelection(spinnerAdapter.getPosition(fromSelected));
 
-            Toast.makeText(this, "Languages switched...and translated", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Languages switched...", Toast.LENGTH_LONG).show();
 
             String input = activityBinding.toOutputTextView.getText().toString();
             activityBinding.fromInputEditText.setText(input);
@@ -100,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     private void setUpSpinners() {
         List<String> spinnerLanguages = new ArrayList<>(this.languages.values());
         Collections.sort(spinnerLanguages);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
+        spinnerAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, spinnerLanguages);
 
         activityBinding.fromSelectorSpinner.setAdapter(spinnerAdapter);
@@ -145,14 +135,10 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
 
         TranslatorAPI.translate(input, lang, new TranslatorAPI.TranslateCallback() {
             @Override
-            public void onSuccess(JSONObject response) {
-                try {
-                    JSONArray array = response.getJSONArray("text");
-                    activityBinding.toOutputTextView.setText(array.getString(0));
-                    progressDialog.hide();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onSuccess(String translation) {
+                activityBinding.toOutputTextView.setText(translation);
+                progressDialog.hide();
+
             }
 
             @Override
@@ -168,10 +154,9 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     }
 
     private void resetTranslation() {
-        ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
-        activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(
+        activityBinding.fromSelectorSpinner.setSelection(spinnerAdapter.getPosition(
                 getString(R.string.defaultInputText)));
-        activityBinding.toSelectorSpinner.setSelection(adapter.getPosition(
+        activityBinding.toSelectorSpinner.setSelection(spinnerAdapter.getPosition(
                 getString(R.string.defaultOutputText)));
 
         activityBinding.fromInputEditText.setText("");

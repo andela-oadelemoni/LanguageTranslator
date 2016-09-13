@@ -2,13 +2,6 @@ package ng.com.tinweb.www.languagetranslator;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
-
-import org.json.JSONObject;
-
-import ng.com.tinweb.www.languagetranslator.data.Language;
-import ng.com.tinweb.www.languagetranslator.data.LanguageDataStore;
-import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 
 /**
  * Created by kamiye on 08/09/2016.
@@ -22,6 +15,8 @@ public class LanguageTranslatorApplication extends Application {
         super.onCreate();
 
         context = this;
+
+        // TODO clean up old translations
     }
 
     public static Context getContext() {
