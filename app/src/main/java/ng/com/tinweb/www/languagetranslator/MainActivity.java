@@ -25,11 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import ng.com.tinweb.www.languagetranslator.data.Language;
+import ng.com.tinweb.www.languagetranslator.data.ShakeDetector;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 import ng.com.tinweb.www.languagetranslator.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements TranslatorView,
-        View.OnClickListener, AdapterView.OnItemSelectedListener {
+        View.OnClickListener, AdapterView.OnItemSelectedListener, ShakeDetector.OnShakeListener {
 
     private ActivityMainBinding activityBinding;
     private ITranslatorPresenter translatorPresenter;
@@ -46,6 +47,50 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         initialisePresenter();
         setUpSpinners();
         setUpTranslateAction();
+        setUpShakeDetector();
+    }
+
+    @Override
+    public void onShake(int count) {
+        Toast.makeText(this, "Device shaken by: " + count, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String value = (String) adapterView.getItemAtPosition(i);
+        if (adapterView == activityBinding.fromSelectorSpinner) {
+            fromSelector = getLanguageCode(languages, value);
+        }
+        if (adapterView == activityBinding.toSelectorSpinner) {
+            toSelector = getLanguageCode(languages, value);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {}
+
+    @Override
+    public void onClick(View view) {
+        if (view == activityBinding.translateButton) {
+            // TODO get translation to be handled by presenter
+            String input = activityBinding.fromInputEditText.getText().toString();
+
+            translateText(input);
+        }
+        if (view == activityBinding.switchTranslationImageView) {
+            ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
+            String fromSelected = (String) activityBinding.fromSelectorSpinner.getSelectedItem();
+            String toSelected = (String) activityBinding.toSelectorSpinner.getSelectedItem();
+
+            activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(toSelected));
+            activityBinding.toSelectorSpinner.setSelection(adapter.getPosition(fromSelected));
+
+            Toast.makeText(this, "Languages switched...and translated", Toast.LENGTH_LONG).show();
+
+            String input = activityBinding.toOutputTextView.getText().toString();
+            activityBinding.fromInputEditText.setText(input);
+            activityBinding.toOutputTextView.setText("");
+        }
     }
 
     private void initialisePresenter() {
@@ -89,44 +134,6 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         activityBinding.switchTranslationImageView.setOnClickListener(this);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String value = (String) adapterView.getItemAtPosition(i);
-        if (adapterView == activityBinding.fromSelectorSpinner) {
-            fromSelector = getLanguageCode(languages, value);
-        }
-        if (adapterView == activityBinding.toSelectorSpinner) {
-            toSelector = getLanguageCode(languages, value);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {}
-
-    @Override
-    public void onClick(View view) {
-        if (view == activityBinding.translateButton) {
-            // TODO get translation to be handled by presenter
-            String input = activityBinding.fromInputEditText.getText().toString();
-
-            translateText(input);
-        }
-        if (view == activityBinding.switchTranslationImageView) {
-            ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
-            String fromSelected = (String) activityBinding.fromSelectorSpinner.getSelectedItem();
-            String toSelected = (String) activityBinding.toSelectorSpinner.getSelectedItem();
-
-            activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(toSelected));
-            activityBinding.toSelectorSpinner.setSelection(adapter.getPosition(fromSelected));
-
-            Toast.makeText(this, "Languages switched...and translated", Toast.LENGTH_LONG).show();
-
-            String input = activityBinding.toOutputTextView.getText().toString();
-            activityBinding.fromInputEditText.setText(input);
-            activityBinding.toOutputTextView.setText("");
-        }
-    }
-
     private void translateText(String input) {
         String lang = fromSelector + "-" + toSelector;
 
@@ -155,6 +162,11 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         });
     }
 
+    private void setUpShakeDetector() {
+        ShakeDetector shakeDetector = new ShakeDetector();
+        shakeDetector.setOnShakeListener(this);
+    }
+
     private void resetTranslation() {
         ArrayAdapter<String> adapter = (ArrayAdapter<String>) activityBinding.fromSelectorSpinner.getAdapter();
         activityBinding.fromSelectorSpinner.setSelection(adapter.getPosition(
@@ -165,4 +177,5 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
         activityBinding.fromInputEditText.setText("");
         activityBinding.toOutputTextView.setText("");
     }
+
 }
