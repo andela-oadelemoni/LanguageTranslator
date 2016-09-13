@@ -4,6 +4,8 @@ import android.content.Context;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import ng.com.tinweb.www.languagetranslator.LanguageTranslatorApplication;
 
 /**
@@ -28,5 +30,9 @@ public class Language {
 
     public void setLanguages(JSONObject languages, LanguageDataStore.DbActionCallback callback) {
         dataStore.saveLanguages(languages, callback);
+    }
+
+    public HashMap<String, String> getLanguages() {
+        return dataStore.getAllLanguages();
     }
 }

@@ -15,22 +15,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
+import ng.com.tinweb.www.languagetranslator.data.Language;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 import ng.com.tinweb.www.languagetranslator.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements TranslatorView,
         View.OnClickListener{
 
+    private static Language languageModel;
     private ActivityMainBinding activityBinding;
     private ITranslatorPresenter translatorPresenter;
     private String fromSelector = "en";
     private String toSelector = "en";
+    private HashMap<String, String> languages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        initialiseLanguageModel();
         initialisePresenter();
         setUpSpinners();
         setUpTranslateAction();
@@ -41,8 +51,10 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
     }
 
     private void setUpSpinners() {
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.testValues, android.R.layout.simple_spinner_item);
+        List<String> languages = new ArrayList<>(this.languages.values());
+        Collections.sort(languages);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, languages);
 
         // TODO use a custom adapter here to make spinner selection in plain English
 
@@ -66,6 +78,11 @@ public class MainActivity extends AppCompatActivity implements TranslatorView,
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+    }
+
+    private void initialiseLanguageModel() {
+        languageModel = new Language();
+        languages = languageModel.getLanguages();
     }
 
     private void setUpTranslateAction() {

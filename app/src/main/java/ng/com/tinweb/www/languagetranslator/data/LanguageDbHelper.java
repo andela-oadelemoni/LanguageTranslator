@@ -9,7 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by kamiye on 13/09/2016.
@@ -83,6 +86,41 @@ public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataSt
             return true;
         }
         return false;
+    }
+
+    @Override
+    public HashMap<String, String> getAllLanguages() {
+        SQLiteDatabase database = getReadableDatabase();
+        String[] projection = {
+                DbContract.LanguagesSchema.COLUMN_LANGUAGE_KEY,
+                DbContract.LanguagesSchema.COLUMN_LANGUAGE_VALUE
+        };
+        Cursor cursor = database.query(
+                DbContract.LanguagesSchema.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            HashMap<String, String> languageMap = new HashMap<>();
+
+            while(cursor.moveToNext()) {
+                String key = cursor.getString(
+                        cursor.getColumnIndexOrThrow(DbContract.LanguagesSchema.COLUMN_LANGUAGE_KEY)
+                );
+                String value = cursor.getString(
+                        cursor.getColumnIndexOrThrow(DbContract.LanguagesSchema.COLUMN_LANGUAGE_VALUE)
+                );
+                languageMap.put(key, value);
+            }
+            cursor.close();
+            return languageMap;
+        }
+        cursor.close();
+        return null;
     }
 
     @Override
