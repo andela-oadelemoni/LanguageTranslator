@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements ITranslatorView,
 
     private String inputLanguage;
     private String outputLanguage;
-    private ArrayAdapter<String> spinnerAdapter;
+    private CustomSpinnerAdapter spinnerAdapter;
     private ProgressDialog progressDialog;
 
     @Override
@@ -103,8 +103,10 @@ public class MainActivity extends AppCompatActivity implements ITranslatorView,
     private void setUpSpinners() {
         List<String> spinnerLanguages = translatorPresenter.getLanguages();
 
-        spinnerAdapter = new ArrayAdapter<>(this,
+        spinnerAdapter = new CustomSpinnerAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, spinnerLanguages);
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         activityBinding.fromSelectorSpinner.setAdapter(spinnerAdapter);
         activityBinding.toSelectorSpinner.setAdapter(spinnerAdapter);
