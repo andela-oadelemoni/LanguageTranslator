@@ -14,6 +14,7 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -29,4 +30,27 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile 'com.android.support:support-v4:24.2.0'
+
+    // Test dependencies
+    testCompile test.junit
+    testCompile test.mockito
+    testCompile test.powermock_module
+    testCompile test.powermock_api
+    androidTestCompile androidTest.support_annotations
+    androidTestCompile androidTest.support_test_runner
+    androidTestCompile androidTest.support_test_rules
+    // Optional -- Hamcrest library
+    androidTestCompile androidTest.hamcrest
+    // Optional -- UI testing with Espresso
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.ESPRESSO_VERSION"
+    androidTestCompile ("com.android.support.test.espresso:espresso-core:$rootProject.ESPRESSO_VERSION" ,{
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$rootProject.ESPRESSO_VERSION") {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'appcompat-v7'
+        exclude module: 'design'
+    }
 }

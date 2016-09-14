@@ -48,9 +48,12 @@ public class TranslatorPresenter implements ITranslatorPresenter {
     @Override
     public List<String> getLanguages() {
         languages = languageModel.getLanguages();
-        List<String> languages = new ArrayList<>(this.languages.values());
-        Collections.sort(languages);
-        return languages;
+        if (this.languages != null) {
+            List<String> languages = new ArrayList<>(this.languages.values());
+            Collections.sort(languages);
+            return languages;
+        }
+        return null;
     }
 
     @Override
