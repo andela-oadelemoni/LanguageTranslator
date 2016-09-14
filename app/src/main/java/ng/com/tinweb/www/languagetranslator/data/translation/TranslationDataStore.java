@@ -1,4 +1,4 @@
-package ng.com.tinweb.www.languagetranslator.data;
+package ng.com.tinweb.www.languagetranslator.data.translation;
 
 /**
  * Created by kamiye on 13/09/2016.

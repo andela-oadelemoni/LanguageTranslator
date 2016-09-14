@@ -24,4 +24,5 @@
     <string name="fetching_languages">Fetching Languages…</string>
     <string name="error_message">Error Loading Languages</string>
     <string name="switch_translation">Switch Translation</string>
+    <string name="languages_switched">Languages switched</string>
 </resources>

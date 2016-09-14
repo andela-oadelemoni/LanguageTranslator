@@ -1,4 +1,4 @@
-package ng.com.tinweb.www.languagetranslator.data;
+package ng.com.tinweb.www.languagetranslator.data.translation;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,11 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Iterator;
+import ng.com.tinweb.www.languagetranslator.data.DbContract;
 
 /**
  * Created by kamiye on 13/09/2016.

@@ -1,4 +1,4 @@
-package ng.com.tinweb.www.languagetranslator.data;
+package ng.com.tinweb.www.languagetranslator.data.translation;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package ng.com.tinweb.www.languagetranslator.data;
+package ng.com.tinweb.www.languagetranslator.data.language;
 
 import org.json.JSONObject;
 

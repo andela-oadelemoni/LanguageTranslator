@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import ng.com.tinweb.www.languagetranslator.LanguageTranslatorApplication;
 import ng.com.tinweb.www.languagetranslator.R;
+import ng.com.tinweb.www.languagetranslator.data.translation.Translation;
 
 /**
  * Created by kamiye on 08/09/2016.

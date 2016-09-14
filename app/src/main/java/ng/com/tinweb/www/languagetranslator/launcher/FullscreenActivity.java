@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import ng.com.tinweb.www.languagetranslator.MainActivity;
+import ng.com.tinweb.www.languagetranslator.translator.MainActivity;
 import ng.com.tinweb.www.languagetranslator.R;
 import ng.com.tinweb.www.languagetranslator.databinding.ActivityFullscreenBinding;
 

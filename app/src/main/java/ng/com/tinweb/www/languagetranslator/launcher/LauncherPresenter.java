@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 
-import ng.com.tinweb.www.languagetranslator.data.Language;
-import ng.com.tinweb.www.languagetranslator.data.LanguageDataStore;
+import ng.com.tinweb.www.languagetranslator.data.language.Language;
+import ng.com.tinweb.www.languagetranslator.data.language.LanguageDataStore;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 
 /**
