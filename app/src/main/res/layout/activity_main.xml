@@ -6,9 +6,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -16,7 +17,6 @@
             tools:context=".translator.MainActivity">
 
             <LinearLayout
-                android:id="@+id/spinnerContainerLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
@@ -80,46 +80,39 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_below="@+id/spinnerContainerLinearLayout"
+            <EditText
+                android:id="@+id/fromInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="20dp"
+                android:hint="@string/enter_text" />
 
-                <EditText
-                    android:id="@+id/fromInputEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="@string/enter_text" />
+            <Button
+                android:id="@+id/translateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:text="@string/translate" />
 
-                <Button
-                    android:id="@+id/translateButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="20dp"
-                    android:text="@string/translate" />
+            <TextView
+                android:id="@+id/toOutputTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/toOutputTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
                 android:text="@string/powered_by_yandex"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="12sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 

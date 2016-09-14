@@ -28,11 +28,13 @@ public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataSt
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(DbContract.SQL_CREATE_LANGUAGE_ENTRIES);
+        sqLiteDatabase.execSQL(DbContract.SQL_CREATE_TRANSLATIONS_ENTRIES);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVerson, int newVersion) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL(DbContract.SQL_DELETE_LANGUAGE_ENTRIES);
+        sqLiteDatabase.execSQL(DbContract.SQL_DELETE_TRANSLATIONS_ENTRIES);
         onCreate(sqLiteDatabase);
     }
 

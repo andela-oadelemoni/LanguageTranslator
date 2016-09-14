@@ -9,7 +9,7 @@ public final class DbContract {
 
     private DbContract() {}
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Translator.db";
 
     private static final String TEXT_TYPE = " TEXT";
