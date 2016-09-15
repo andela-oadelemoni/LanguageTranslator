@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import ng.com.tinweb.www.languagetranslator.Injection;
 import ng.com.tinweb.www.languagetranslator.translator.MainActivity;
 import ng.com.tinweb.www.languagetranslator.R;
 import ng.com.tinweb.www.languagetranslator.databinding.ActivityFullscreenBinding;
@@ -15,15 +16,12 @@ public class FullscreenActivity extends AppCompatActivity implements ILauncherVi
     private ILauncherPresenter launcherPresenter;
     private ActivityFullscreenBinding activityBinding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_fullscreen);
         setUpPresenter();
-
-        //deleteLanguages();
     }
 
     @Override
@@ -33,9 +31,9 @@ public class FullscreenActivity extends AppCompatActivity implements ILauncherVi
 
     @Override
     public void onLanguageLoadingError(String errorMessage) {
-        activityBinding.errorMessage.setVisibility(View.VISIBLE);
-        activityBinding.button.setVisibility(View.VISIBLE);
-        activityBinding.button.setOnClickListener(new View.OnClickListener() {
+        activityBinding.errorMessageTextView.setVisibility(View.VISIBLE);
+        activityBinding.proceedButton.setVisibility(View.VISIBLE);
+        activityBinding.proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchMainActivity();
@@ -44,7 +42,8 @@ public class FullscreenActivity extends AppCompatActivity implements ILauncherVi
     }
 
     private void setUpPresenter() {
-        launcherPresenter = new LauncherPresenter(this);
+        launcherPresenter = new LauncherPresenter(Injection.getLanguageModel(), this);
+        launcherPresenter.getLanguages();
     }
 
     private void deleteLanguages() {

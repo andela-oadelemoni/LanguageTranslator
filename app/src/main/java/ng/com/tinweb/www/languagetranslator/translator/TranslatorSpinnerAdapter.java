@@ -25,7 +25,7 @@ public class TranslatorSpinnerAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView txt = new TextView(getContext());
-        txt.setPadding(30, 30, 30, 30);
+        txt.setPadding(20, 20, 20, 20);
         txt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_dropdown_arrow_light, 0);
         txt.setText(languages.get(position));
         return  txt;

@@ -1,5 +1,6 @@
 package ng.com.tinweb.www.languagetranslator;
 
+import ng.com.tinweb.www.languagetranslator.data.language.Language;
 import ng.com.tinweb.www.languagetranslator.data.translation.Translation;
 
 /**
@@ -9,5 +10,9 @@ public class Injection {
 
     public static Translation getTranslationModel() {
         return new Translation();
+    }
+
+    public static Language getLanguageModel() {
+        return new Language();
     }
 }

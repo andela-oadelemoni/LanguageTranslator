@@ -23,9 +23,6 @@ public class TranslatorPresenterTest {
     @Mock
     private Translation translationModel;
 
-    @Captor
-    private ArgumentCaptor<TranslatorAPI.TranslateCallback> translateCallback;
-
     private TranslatorPresenter translatorPresenter;
 
     @Before
@@ -57,6 +54,20 @@ public class TranslatorPresenterTest {
         translatorPresenter.getLanguageCode("English");
 
         verify(translationModel).getLanguagesByMap();
+    }
+
+    @Test
+    public void testSuccessCallback() {
+        translatorPresenter.onSuccess("something");
+
+        verify(translatorView).onTranslateSuccessful("something");
+    }
+
+    @Test
+    public void testErrorCallback() {
+        translatorPresenter.onError();
+
+        verify(translatorView).onTranslateError();
     }
 
 }

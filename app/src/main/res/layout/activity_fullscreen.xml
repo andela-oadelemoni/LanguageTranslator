@@ -9,7 +9,7 @@
 
 
         <TextView
-            android:id="@+id/fullscreen_content"
+            android:id="@+id/fetchStatusTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -20,11 +20,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/error_message"
+            android:id="@+id/errorMessageTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorAccent"
-            android:layout_above="@+id/button"
+            android:layout_above="@+id/proceedButton"
             android:layout_marginBottom="20dp"
             android:textSize="18sp"
             android:visibility="gone"
@@ -32,7 +32,7 @@
             android:text="@string/error_message"/>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/proceedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"

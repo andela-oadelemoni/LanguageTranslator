@@ -5,4 +5,5 @@ package ng.com.tinweb.www.languagetranslator.launcher;
  */
 public interface ILauncherPresenter {
     void removeAllLanguages();
+    void getLanguages();
 }

@@ -59,7 +59,7 @@ public class Translation {
         Context context = LanguageTranslatorApplication.getContext();
 
         RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
-        String url = TranslatorAPI.getUrl(text, lang);
+        String url = TranslatorAPI.getTranslationUrl(text, lang);
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonObjectRequest.Method.GET,
                 url, null, new Response.Listener<JSONObject>() {
@@ -83,7 +83,7 @@ public class Translation {
     }
 
     public List<String> getLanguagesByList() {
-        HashMap<String, String> languagesMap = Language.getLanguages();
+        HashMap<String, String> languagesMap = Language.getLanguagesFromLocalStorage();
         if (languagesMap != null) {
             List<String> languages = new ArrayList<>(languagesMap.values());
             Collections.sort(languages);
@@ -93,7 +93,7 @@ public class Translation {
     }
 
     public HashMap<String, String> getLanguagesByMap() {
-        return Language.getLanguages();
+        return Language.getLanguagesFromLocalStorage();
     }
 
     private void initialiseDataStore() {
