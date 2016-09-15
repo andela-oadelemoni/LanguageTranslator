@@ -7,15 +7,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 import ng.com.tinweb.www.languagetranslator.data.translation.Translation;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -33,7 +27,6 @@ public class TranslatorPresenterTest {
     private ArgumentCaptor<TranslatorAPI.TranslateCallback> translateCallback;
 
     private TranslatorPresenter translatorPresenter;
-    List<String> mockList = new ArrayList<>();
 
     @Before
     public void setUpTest() {
