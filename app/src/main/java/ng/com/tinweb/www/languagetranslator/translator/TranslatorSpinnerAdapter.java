@@ -13,11 +13,11 @@ import ng.com.tinweb.www.languagetranslator.R;
 /**
  * Created by kamiye on 14/09/2016.
  */
-public class CustomSpinnerAdapter extends ArrayAdapter<String> {
+public class TranslatorSpinnerAdapter extends ArrayAdapter<String> {
 
     private List<String> languages;
 
-    public CustomSpinnerAdapter(Context context, int resource, List<String> languages) {
+    public TranslatorSpinnerAdapter(Context context, int resource, List<String> languages) {
         super(context, resource, languages);
         this.languages = languages;
     }

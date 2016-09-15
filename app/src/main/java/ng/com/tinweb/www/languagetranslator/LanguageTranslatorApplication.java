@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.List;
+
 import ng.com.tinweb.www.languagetranslator.data.translation.TranslationsDbHelper;
 
 /**
@@ -14,6 +16,7 @@ import ng.com.tinweb.www.languagetranslator.data.translation.TranslationsDbHelpe
 public class LanguageTranslatorApplication extends Application {
 
     private static Context context;
+    private static List<String> languages;
 
     @Override
     public void onCreate() {
@@ -21,12 +24,16 @@ public class LanguageTranslatorApplication extends Application {
 
         context = this;
 
-        getTableNames();
+        //getTableNames();
         // TODO clean up old translations
     }
 
     public static Context getContext() {
         return context;
+    }
+
+    public static void setLanguages(List<String> languages) {
+        LanguageTranslatorApplication.languages = languages;
     }
 
     private void getTableNames() {

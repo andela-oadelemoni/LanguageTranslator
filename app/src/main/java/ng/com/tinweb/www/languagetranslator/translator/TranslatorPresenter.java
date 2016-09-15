@@ -1,63 +1,52 @@
 package ng.com.tinweb.www.languagetranslator.translator;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import ng.com.tinweb.www.languagetranslator.data.language.Language;
 import ng.com.tinweb.www.languagetranslator.data.ShakeDetector;
-import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
+import ng.com.tinweb.www.languagetranslator.data.translation.Translation;
 
 /**
  * Created by kamiye on 08/09/2016.
  */
-public class TranslatorPresenter implements ITranslatorPresenter {
+public class TranslatorPresenter implements ITranslatorPresenter, Translation.ApiCallback {
 
     private WeakReference<ITranslatorView> translatorView;
-    private Language languageModel;
-    private HashMap<String, String> languages;
+    private Translation translationModel;
 
-    public TranslatorPresenter (ITranslatorView ITranslatorView) {
+    public TranslatorPresenter (Translation translationModel, ITranslatorView ITranslatorView) {
         this.translatorView = new WeakReference<>(ITranslatorView);
-        languageModel = new Language();
+        this.translationModel = translationModel;
     }
-
 
     @Override
     public void translateText(String text, String language) {
+        translationModel.get(language, text, this);
+    }
 
-        TranslatorAPI.translate(text, language, new TranslatorAPI.TranslateCallback() {
-            @Override
-            public void onSuccess(String translation) {
-                if (translatorView.get() != null) {
-                    translatorView.get().onTranslateSuccessful(translation);
-                }
-            }
+    @Override
+    public void onSuccess(String translation) {
+        if (translatorView.get() != null) {
+            translatorView.get().onTranslateSuccessful(translation);
+        }
+    }
 
-            @Override
-            public void onError() {
-                if (translatorView.get() != null) {
-                    translatorView.get().onTranslateError();
-                }
-            }
-        });
+    @Override
+    public void onError() {
+        if (translatorView.get() != null) {
+            translatorView.get().onTranslateError();
+        }
     }
 
     @Override
     public List<String> getLanguages() {
-        languages = languageModel.getLanguages();
-        if (this.languages != null) {
-            List<String> languages = new ArrayList<>(this.languages.values());
-            Collections.sort(languages);
-            return languages;
-        }
-        return null;
+        return translationModel.getLanguagesByList();
     }
 
     @Override
     public String getLanguageCode(String value) {
+        HashMap<String, String> languages = translationModel.getLanguagesByMap();
         for (String key : languages.keySet()) {
             if (languages.get(key).equals(value)) {
                 return key;

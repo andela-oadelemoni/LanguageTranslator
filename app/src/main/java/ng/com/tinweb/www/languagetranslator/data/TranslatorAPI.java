@@ -25,42 +25,40 @@ public class TranslatorAPI {
     private static Context context = LanguageTranslatorApplication.getContext();
     private static String apiKey = context.getResources().getString(R.string.translation_key);
 
-    public static void translate(String input, String translationDirection,
-                                 final TranslateCallback translateCallback) {
-
-        Translation translationModel = new Translation();
-        RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
-        String inputQuery = "&text=" + input;
-        String translationQuery = "&lang=" + translationDirection;
-
-        String queryString = getUrl() + inputQuery + translationQuery;
-
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonObjectRequest.Method.GET,
-                queryString, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray array = response.getJSONArray("text");
-                    String translation = array.getString(0);
-                    translateCallback.onSuccess(translation);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ERROR", "An error occurred: " + error.getMessage());
-            }
-        });
-        if (translationModel.isExisting(translationDirection, input)) {
-            String translation = translationModel.get(translationDirection, input);
-            translateCallback.onSuccess(translation);
-        }
-        else {
-            volleyRequestQueue.add(jsonRequest);
-        }
-    }
+//    public static void translate(String input, String translationDirection,
+//                                 final TranslateCallback translateCallback) {
+//
+//        Translation translationModel = new Translation();
+//        RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
+//
+//        String queryString = getUrl(input, translationDirection);
+//
+//        JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonObjectRequest.Method.GET,
+//                queryString, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    JSONArray array = response.getJSONArray("text");
+//                    String translation = array.getString(0);
+//                    translateCallback.onSuccess(translation);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("ERROR", "An error occurred: " + error.getMessage());
+//            }
+//        });
+//        if (translationModel.isExisting(translationDirection, input)) {
+//            String translation = translationModel.getFromLocalStorage(translationDirection, input);
+//            translateCallback.onSuccess(translation);
+//        }
+//        else {
+//            volleyRequestQueue.add(jsonRequest);
+//        }
+//    }
 
     public static void getLanguages(final GetLanguageCallback callback) {
         Log.i("STATUS", "language call is made");
@@ -89,11 +87,13 @@ public class TranslatorAPI {
         volleyRequestQueue.add(jsonRequest);
     }
 
-    private static String getUrl() {
+    public static String getUrl(String text, String language) {
+        String inputText = "&text=" + text;
+        String translationDirection = "&lang=" + language;
         String baseUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=";
         String key = context.getResources().getString(R.string.translation_key);
 
-        return baseUrl + key;
+        return baseUrl + key + inputText + translationDirection;
     }
 
     public interface TranslateCallback {

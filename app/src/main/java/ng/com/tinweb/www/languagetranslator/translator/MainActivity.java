@@ -6,12 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.List;
 
 import ng.com.tinweb.www.languagetranslator.R;
+import ng.com.tinweb.www.languagetranslator.Injection;
 import ng.com.tinweb.www.languagetranslator.data.ShakeDetector;
 import ng.com.tinweb.www.languagetranslator.databinding.ActivityMainBinding;
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements ITranslatorView,
 
     private String inputLanguage;
     private String outputLanguage;
-    private CustomSpinnerAdapter spinnerAdapter;
+    private TranslatorSpinnerAdapter spinnerAdapter;
     private ProgressDialog progressDialog;
 
     @Override
@@ -97,13 +97,13 @@ public class MainActivity extends AppCompatActivity implements ITranslatorView,
     }
 
     private void initialisePresenter() {
-        translatorPresenter = new TranslatorPresenter(this);
+        translatorPresenter = new TranslatorPresenter(Injection.getTranslationModel(), this);
     }
 
     private void setUpSpinners() {
         List<String> spinnerLanguages = translatorPresenter.getLanguages();
 
-        spinnerAdapter = new CustomSpinnerAdapter(this,
+        spinnerAdapter = new TranslatorSpinnerAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, spinnerLanguages);
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

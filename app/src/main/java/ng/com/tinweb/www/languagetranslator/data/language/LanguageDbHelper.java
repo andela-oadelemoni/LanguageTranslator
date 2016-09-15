@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import ng.com.tinweb.www.languagetranslator.LanguageTranslatorApplication;
 import ng.com.tinweb.www.languagetranslator.data.DbContract;
 
 /**
@@ -20,9 +21,18 @@ import ng.com.tinweb.www.languagetranslator.data.DbContract;
 public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataStore {
 
     // Note: if you change the database schema, you must increment the database version
+    private static LanguageDbHelper languageDbHelper;
 
     public LanguageDbHelper(Context context) {
         super(context, DbContract.DATABASE_NAME, null, DbContract.DATABASE_VERSION);
+    }
+
+    public static LanguageDbHelper getInstance() {
+        if (languageDbHelper == null) {
+            Context context = LanguageTranslatorApplication.getContext();
+            languageDbHelper = new LanguageDbHelper(context);
+        }
+        return languageDbHelper;
     }
 
     @Override

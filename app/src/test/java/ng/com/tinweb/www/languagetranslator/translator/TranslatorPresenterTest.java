@@ -6,22 +6,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
-import ng.com.tinweb.www.languagetranslator.data.language.Language;
+import ng.com.tinweb.www.languagetranslator.data.translation.Translation;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by kamiye on 14/09/2016.
@@ -32,7 +27,7 @@ public class TranslatorPresenterTest {
     private ITranslatorView translatorView;
 
     @Mock
-    private Language languageModel;
+    private Translation translationModel;
 
     @Captor
     private ArgumentCaptor<TranslatorAPI.TranslateCallback> translateCallback;
@@ -43,11 +38,8 @@ public class TranslatorPresenterTest {
     @Before
     public void setUpTest() {
         MockitoAnnotations.initMocks(this);
-        translatorPresenter = mock(TranslatorPresenter.class);
-        mockList.add("Dutch");
-        mockList.add("Swiss");
-        when(translatorPresenter.getLanguages()).thenReturn(mockList);
-        when(translatorPresenter.getLanguageCode("English")).thenReturn("en");
+
+        translatorPresenter = new TranslatorPresenter(translationModel, translatorView);
     }
 
     @Test
@@ -57,21 +49,21 @@ public class TranslatorPresenterTest {
 
         translatorPresenter.translateText(text, language);
 
-        // TODO complete this test
+        verify(translationModel).get(language, text, translatorPresenter);
     }
 
     @Test
     public void testGetLanguages() {
-        List<String> languages = translatorPresenter.getLanguages();
+        translatorPresenter.getLanguages();
 
-        assertEquals(mockList, languages);
+        verify(translationModel).getLanguagesByList();
     }
 
     @Test
     public void testGetLanguageCode() {
-        String langaugeCode = translatorPresenter.getLanguageCode("English");
+        translatorPresenter.getLanguageCode("English");
 
-        assertEquals("en", langaugeCode);
+        verify(translationModel).getLanguagesByMap();
     }
 
 }
