@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import ng.com.tinweb.www.languagetranslator.LanguageTranslatorApplication;
+import ng.com.tinweb.www.languagetranslator.LanguageTranslator;
 import ng.com.tinweb.www.languagetranslator.data.DbContract;
 
 /**
@@ -29,7 +29,7 @@ public class LanguageDbHelper extends SQLiteOpenHelper implements LanguageDataSt
 
     public static LanguageDbHelper getInstance() {
         if (languageDbHelper == null) {
-            Context context = LanguageTranslatorApplication.getContext();
+            Context context = LanguageTranslator.getContext();
             languageDbHelper = new LanguageDbHelper(context);
         }
         return languageDbHelper;

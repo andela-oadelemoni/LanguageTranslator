@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ import ng.com.tinweb.www.languagetranslator.data.translation.TranslationsDbHelpe
 /**
  * Created by kamiye on 08/09/2016.
  */
-public class LanguageTranslatorApplication extends Application {
+public class LanguageTranslator extends Application {
 
     private static Context context;
     private static List<String> languages;
@@ -33,7 +32,7 @@ public class LanguageTranslatorApplication extends Application {
     }
 
     public static void setLanguages(List<String> languages) {
-        LanguageTranslatorApplication.languages = languages;
+        LanguageTranslator.languages = languages;
     }
 
     private void getTableNames() {

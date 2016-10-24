@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import ng.com.tinweb.www.languagetranslator.LanguageTranslatorApplication;
+import ng.com.tinweb.www.languagetranslator.LanguageTranslator;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 
 /**
@@ -43,7 +43,7 @@ public class Language {
     }
 
     private void getLanguagesFromApi(final ApiCallback callback) {
-        Context context = LanguageTranslatorApplication.getContext();
+        Context context = LanguageTranslator.getContext();
 
         RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
         String url = TranslatorAPI.getLanguagesUrl();
