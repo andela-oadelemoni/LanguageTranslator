@@ -1,27 +1,25 @@
 package ng.com.tinweb.www.languagetranslator.data.language;
 
-import android.content.Context;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import ng.com.tinweb.www.languagetranslator.LanguageTranslator;
 import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
+import retrofit2.Call;
+import retrofit2.Callback;
+
+import static ng.com.tinweb.www.languagetranslator.data.TranslatorAPI.TranslationService.retrofit;
 
 /**
  * Created by kamiye on 13/09/2016.
  */
-public class Language {
+public class Language implements Callback<JsonObject> {
 
     private static LanguageDataStore dataStore;
+    private ApiCallback apiCallback;
 
     public boolean isLanguagesSet() {
         initialiseDataStore();
@@ -43,36 +41,15 @@ public class Language {
     }
 
     private void getLanguagesFromApi(final ApiCallback callback) {
-        Context context = LanguageTranslator.getContext();
+        if (apiCallback == null) {
+            apiCallback = callback;
+        }
+        TranslatorAPI.TranslationService translationService =
+                retrofit.create(TranslatorAPI.TranslationService.class);
+        Call<JsonObject> jsonObjectCall =
+                translationService.getLanguages(TranslatorAPI.API_KEY);
 
-        RequestQueue volleyRequestQueue = Volley.newRequestQueue(context);
-        String url = TranslatorAPI.getLanguagesUrl();
-
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(JsonObjectRequest.Method.GET,
-                url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONObject languages = response.getJSONObject("langs");
-
-                    setLanguages(languages, new LanguageDataStore.DbActionCallback() {
-                        @Override
-                        public void onFinish() {
-                            callback.onSuccess();
-                        }
-                    });
-//                    callback.onSuccess(languages);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onError(error.getMessage());
-            }
-        });
-        volleyRequestQueue.add(jsonRequest);
+        jsonObjectCall.enqueue(this);
     }
 
     public void removeAll() {
@@ -83,6 +60,27 @@ public class Language {
     public static HashMap<String, String> getLanguagesFromLocalStorage() {
         initialiseDataStore();
         return dataStore.getAllLanguages();
+    }
+
+    @Override
+    public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+        JsonObject languages = response.body().getAsJsonObject("langs");
+        try {
+            JSONObject lang = new JSONObject(languages.toString());
+            setLanguages(lang, new LanguageDataStore.DbActionCallback() {
+                @Override
+                public void onFinish() {
+                    apiCallback.onSuccess();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFailure(Call<JsonObject> call, Throwable t) {
+        apiCallback.onError(t.getLocalizedMessage());
     }
 
     private static void initialiseDataStore() {

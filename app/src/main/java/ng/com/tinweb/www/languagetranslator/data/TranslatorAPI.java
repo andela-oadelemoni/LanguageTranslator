@@ -45,6 +45,9 @@ public class TranslatorAPI {
                                         @Query("text") String text,
                                         @Query("lang") String lang);
 
+        @GET("api/v1.5/tr.json/getLangs?ui=en")
+        Call<JsonObject> getLanguages(@Query("key") String key);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RETROFIT_URL)
                 .addConverterFactory(GsonConverterFactory.create())

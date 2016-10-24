@@ -3,20 +3,9 @@ package ng.com.tinweb.www.languagetranslator.data.translation;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,16 +16,16 @@ import ng.com.tinweb.www.languagetranslator.data.TranslatorAPI;
 import ng.com.tinweb.www.languagetranslator.data.language.Language;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
 
 import static ng.com.tinweb.www.languagetranslator.data.TranslatorAPI.TranslationService.retrofit;
 
 /**
  * Created by kamiye on 13/09/2016.
  */
-public class Translation {
+public class Translation implements Callback<JsonObject> {
 
     private TranslationDataStore dataStore;
+    private ApiCallback apiCallback;
 
     public Translation() {
         initialiseDataStore();
@@ -65,27 +54,15 @@ public class Translation {
 
     public void getFromAPI(String lang, String text, final ApiCallback callback) {
 
+        if (apiCallback == null) {
+            apiCallback = callback;
+        }
         TranslatorAPI.TranslationService translationService =
                 retrofit.create(TranslatorAPI.TranslationService.class);
+        Call<JsonObject> jsonObjectCall =
+                translationService.getTranslation(TranslatorAPI.API_KEY, text, lang);
 
-        Call<JsonObject> jsonObjectCall = translationService.getTranslation(TranslatorAPI.API_KEY,
-                text, lang);
-
-        jsonObjectCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-
-                JsonElement array = response.body().get("text");
-                String translation = array.getAsString();
-                callback.onSuccess(translation);
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e("ERROR", "An error occurred: " + t.getLocalizedMessage());
-            }
-        });
-
+        jsonObjectCall.enqueue(this);
     }
 
     public List<String> getLanguagesByList() {
@@ -100,6 +77,19 @@ public class Translation {
 
     public HashMap<String, String> getLanguagesByMap() {
         return Language.getLanguagesFromLocalStorage();
+    }
+
+    @Override
+    public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
+        JsonElement array = response.body().get("text");
+        String translation = array.getAsString();
+        apiCallback.onSuccess(translation);
+    }
+
+    @Override
+    public void onFailure(Call<JsonObject> call, Throwable t) {
+        Log.e("ERROR", "An error occurred: " + t.getLocalizedMessage());
+        apiCallback.onError();
     }
 
     private void initialiseDataStore() {
