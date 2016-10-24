@@ -20,24 +20,7 @@ public class TranslatorAPI {
     public static final String API_KEY = LanguageTranslator.getContext()
             .getResources().getString(R.string.translation_key);
 
-    private static final String TRANSLATION_BASE_URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?key="
-            + API_KEY;
-    private static final String LANGUAGES_BASE_URL = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?ui=en&key="
-            + API_KEY;
-
-    private static final String RETROFIT_URL = "https://translate.yandex.net/";
-    private static final String GITHUB_API = "https://api.github.com/";
-
-    public static String getTranslationUrl(String text, String language) {
-        String inputText = "&text=" + text;
-        String translationDirection = "&lang=" + language;
-
-        return TRANSLATION_BASE_URL + inputText + translationDirection;
-    }
-
-    public static String getLanguagesUrl() {
-        return LANGUAGES_BASE_URL;
-    }
+    private static final String API_BASE_URL = "https://translate.yandex.net/";
 
     public interface TranslationService {
         @GET("api/v1.5/tr.json/translate")
@@ -49,7 +32,7 @@ public class TranslatorAPI {
         Call<JsonObject> getLanguages(@Query("key") String key);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RETROFIT_URL)
+                .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
